@@ -13,5 +13,6 @@ public class Main {
         String lastName = "Paul";
         byte age = 30;
         userDao.saveUser(name,lastName,age);
+        userDao.cleanUsersTable();
     }
 }

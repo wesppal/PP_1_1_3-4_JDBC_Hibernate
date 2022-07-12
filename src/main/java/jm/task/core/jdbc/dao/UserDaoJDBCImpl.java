@@ -13,6 +13,8 @@ public class UserDaoJDBCImpl implements UserDao {
             " auto_increment, name varchar(100),  lastName varchar(100), age int)";
     private final static String DROP_USER_TABLE_SQL = "DROP TABLE IF EXISTS user";
     private final static String ADD_NEW_USER_SQL = "INSERT INTO user (name, lastName, age) VALUES (?, ?, ?)";
+    private final static String CLEAN_TABLE_USER_SQL = "TRUNCATE user";
+
 
 
     public UserDaoJDBCImpl() {
@@ -43,10 +45,10 @@ public class UserDaoJDBCImpl implements UserDao {
             while (resultSet.next()) {
                 user.setId(resultSet.getLong(1));
             }
-
             user.setName(name);
             user.setLastName(lastName);
             user.setAge(age);
+            connection.commit();
             System.out.println("Was saved " + user);
 
         } catch (SQLException e) {
@@ -63,7 +65,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-
+        actionWithTable(CLEAN_TABLE_USER_SQL);
     }
 
     private void actionWithTable(String sqlQuery) {
