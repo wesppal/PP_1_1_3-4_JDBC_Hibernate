@@ -4,6 +4,9 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
@@ -15,6 +18,7 @@ public class UserDaoJDBCImpl implements UserDao {
     private final static String ADD_NEW_USER_QUERY = "INSERT INTO user (name, lastName, age) VALUES (?, ?, ?)";
     private final static String CLEAN_TABLE_USER_QUERY = "TRUNCATE user";
     private final static String DELETE_USER_USER_BY_ID_QUERY = "DELETE FROM user WHERE id=";
+    private final static String GET_ALL_USERS_QUERY = "SELECT * FROM user";
 
 
     public UserDaoJDBCImpl() {
@@ -61,7 +65,46 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public List<User> getAllUsers() {
-        return null;
+        List<User> users = new ArrayList<>();
+
+        try {
+            connection = Util.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_USERS_QUERY);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            long id;
+            String name;
+            String lastName;
+            byte age;
+
+            while (resultSet.next()) {
+                User user = new User();
+
+                id = resultSet.getLong("id");
+                name = resultSet.getString("name");
+                lastName = resultSet.getString("lastName");
+                age = (byte) resultSet.getInt("age");
+//                id = resultSet.getLong(1);
+//                name = resultSet.getString(2);
+//                lastName = resultSet.getString(3);
+//                age = resultSet.getByte(4);
+                user.setId(id);
+                user.setName(name);
+                user.setLastName(lastName);
+                user.setAge(age);
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return users;
     }
 
     public void cleanUsersTable() {
