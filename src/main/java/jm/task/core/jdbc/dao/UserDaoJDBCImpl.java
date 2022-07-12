@@ -49,7 +49,7 @@ public class UserDaoJDBCImpl implements UserDao {
             user.setLastName(lastName);
             user.setAge(age);
             connection.commit();
-            System.out.println("Was saved " + user);
+            System.out.println(user + "was added to the database.");
 
         } catch (SQLException e) {
             e.printStackTrace();
