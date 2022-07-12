@@ -9,23 +9,23 @@ import java.util.List;
 public class UserDaoJDBCImpl implements UserDao {
     private static Connection connection = null;
     private static Statement statement = null;
-    private final static String CREATE_USER_TABLE_SQL = "CREATE TABLE IF NOT EXISTS user(id BIGINT primary key" +
+    private final static String CREATE_USER_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS user(id BIGINT primary key" +
             " auto_increment, name varchar(100),  lastName varchar(100), age int)";
-    private final static String DROP_USER_TABLE_SQL = "DROP TABLE IF EXISTS user";
-    private final static String ADD_NEW_USER_SQL = "INSERT INTO user (name, lastName, age) VALUES (?, ?, ?)";
-    private final static String CLEAN_TABLE_USER_SQL = "TRUNCATE user";
-
+    private final static String DROP_USER_TABLE_QUERY = "DROP TABLE IF EXISTS user";
+    private final static String ADD_NEW_USER_QUERY = "INSERT INTO user (name, lastName, age) VALUES (?, ?, ?)";
+    private final static String CLEAN_TABLE_USER_QUERY = "TRUNCATE user";
+    private final static String DELETE_USER_USER_BY_ID_QUERY = "DELETE FROM user WHERE id=";
 
 
     public UserDaoJDBCImpl() {
     }
 
     public void createUsersTable() {
-        actionWithTable(CREATE_USER_TABLE_SQL);
+        actionWithTable(CREATE_USER_TABLE_QUERY);
     }
 
     public void dropUsersTable() {
-        actionWithTable(DROP_USER_TABLE_SQL);
+        actionWithTable(DROP_USER_TABLE_QUERY);
     }
 
     public void saveUser(String name, String lastName, byte age) {
@@ -33,7 +33,7 @@ public class UserDaoJDBCImpl implements UserDao {
             connection = Util.getConnection();
             connection.setAutoCommit(false);
 
-            PreparedStatement statement = connection.prepareStatement(ADD_NEW_USER_SQL, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(ADD_NEW_USER_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setInt(3, age);
@@ -57,7 +57,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-
+        actionWithTable(DELETE_USER_USER_BY_ID_QUERY + id);
     }
 
     public List<User> getAllUsers() {
@@ -65,7 +65,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        actionWithTable(CLEAN_TABLE_USER_SQL);
+        actionWithTable(CLEAN_TABLE_USER_QUERY);
     }
 
     private void actionWithTable(String sqlQuery) {
