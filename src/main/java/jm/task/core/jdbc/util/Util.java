@@ -25,12 +25,12 @@ public class Util {
     }
 
     public static void closeConnection() {
-            try {
-                connection.close();
-                System.out.println("Connection closed.");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            connection.close();
+            System.out.println("Connection closed.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }
