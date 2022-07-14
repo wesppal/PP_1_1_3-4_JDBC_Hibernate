@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private static Connection connection = Util.getConnection();
+    private static final Connection connection = Util.getConnection();
     private final static String CREATE_USER_TABLE_QUERY = "CREATE TABLE IF NOT EXISTS user(id BIGINT primary key" +
             " auto_increment, name varchar(100),  lastName varchar(100), age int)";
     private final static String DROP_USER_TABLE_QUERY = "DROP TABLE IF EXISTS user";
